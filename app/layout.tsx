@@ -8,6 +8,7 @@ import { dark } from "@clerk/themes";
 import Providers from "@/components/package/Providers";
 import Header from "@/components/page/Header";
 import {ClerkProvider} from "@clerk/nextjs";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "Discussions app",
@@ -26,6 +27,7 @@ export default function RootLayout({
           <Providers>
             <Header></Header>
             {children}
+            <Toaster position="top-center" />
           </Providers>
         </body>
       </html>

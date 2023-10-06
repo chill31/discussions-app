@@ -17,6 +17,7 @@ model Discussion {
   created   DateTime  @default(now())
   upvotes   Int       @default(0)
   downvotes Int       @default(0)
+  tags      String[]  @default([])
   authorId  String
   closed    Boolean   @default(false)
   comments  Comment[]

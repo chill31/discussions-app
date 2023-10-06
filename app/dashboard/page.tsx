@@ -1,7 +1,10 @@
 import Container from "@/components/page/Container";
+import NewDiscussionBtn from "@/components/specific/dashboard/newDiscussBtn";
+import Button from "@/components/ui/Button";
 import Paragraph from "@/components/ui/Paragraph";
 import Title from "@/components/ui/Title";
 import { UserProfile } from "@clerk/nextjs";
+import { BsPlus } from "react-icons/bs";
 
 export default function Dashboard() {
   return (
@@ -12,6 +15,8 @@ export default function Dashboard() {
           Manage your account, discussions and see notifications.
         </Paragraph>
       </div>
+
+      <NewDiscussionBtn />
 
       <div className="flex flex-col w-full overflow-x-hidden items-start justify-start gap-4 pl-4 max-sm:items-center max-sm:justify-center">
         <h2 className="text-[2.3rem] max-sm:text-[2rem] font-bold max-sm:text-center">My Discussions</h2>
