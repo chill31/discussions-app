@@ -33,6 +33,7 @@ export default function NewDiscussion() {
   const [fileLink, setFileLink] = useState("");
 
   function handleTagInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    console.log(e.key);
     if (e.key === "Enter") {
       if (tags.length >= 5) return toast.error("You can only add 5 tags");
       if (e.currentTarget.value.length > 15)
@@ -44,6 +45,19 @@ export default function NewDiscussion() {
 
       setTags([...tags, e.currentTarget.value]);
       setTagInputValue("");
+    }
+    if(e.key === ',') {
+      if (tags.length >= 5) return toast.error("You can only add 5 tags");
+      if (e.currentTarget.value.length > 15)
+        return toast.error("Tag cannot exceed 15 characters");
+      if (tags.includes(e.currentTarget.value))
+        return toast.error("Tag already exists");
+      if (tagInputValue.length < 2)
+        return toast.error("Tag must be at least 2 characters long");
+
+      setTags([...tags, e.currentTarget.value]);
+      setTagInputValue("");
+      e.preventDefault();
     }
 
     if (e.key === "Backspace" && e.currentTarget.value === "") {

@@ -33,7 +33,7 @@ export default function TagInput({
         value={inputValue}
         onChange={onInputChange}
         onKeyDown={onInputKeyDown}
-        placeholder="enter a few tags"
+        placeholder="enter a few tags. Press enter or put a comma to create a tag"
         className="w-[45rem] max-w-[92vw]"
       />
     </div>
