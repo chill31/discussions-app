@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply overflow-x-hidden !bg-background;
+}
+
+.light body {
+  @apply !bg-white;
+}
+
+.light .header {
+  @apply bg-black/30;
+}
+
+.header {
+  @apply bg-black/50;
+}
