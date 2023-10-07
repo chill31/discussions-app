@@ -7,9 +7,10 @@ import { Discussion } from "@prisma/client";
 import { showTruncated } from "@/helpers/showTruncated";
 import { Chip } from "@nextui-org/chip";
 import Button from "@/components/ui/Button";
-import { BsBoxArrowUpRight, BsTrash } from "react-icons/bs";
+import { BsBoxArrowUpRight, BsPencilSquare, BsTrash } from "react-icons/bs";
 import { useRouter } from "next/navigation";
-import { revalidatePath } from "next/cache";
+
+import ReactMarkdown from "react-markdown";
 
 export default function UserDiscussions({
   userId,
@@ -64,7 +65,6 @@ export default function UserDiscussions({
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.msg.endsWith("[200]")) {
           toast.success("Discussion deleted");
           router.back();
@@ -105,8 +105,8 @@ export default function UserDiscussions({
               Public
             </Chip>
           )}
-          <p className="dark:text-gray-300 text-gray-700 mt-4">
-            {discussion.content}
+          <p className="dark:text-gray-300 text-gray-700 mt-4 prose dark:prose-invert prose-blue prose-sm h-40 overflow-y-scroll">
+            <ReactMarkdown>{discussion.content}</ReactMarkdown>
           </p>
 
           <div className="flex flex-wrap items-center justify-start gap-3">
@@ -137,6 +137,13 @@ export default function UserDiscussions({
               onClick={() => router.push(`/discussion/${discussion.id}`)}
             >
               <BsBoxArrowUpRight />
+            </Button>
+            <Button
+              size="sm"
+              isIconOnly={true}
+              onClick={() => router.push(`/edit/${discussion.id}`)}
+            >
+              <BsPencilSquare />
             </Button>
           </div>
         </div>

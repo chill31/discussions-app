@@ -2,8 +2,10 @@ import Container from "@/components/page/Container";
 import UserDiscussions from "@/components/specific/dashboard/UserDiscussions";
 import NewDiscussionBtn from "@/components/specific/dashboard/newDiscussBtn";
 import Paragraph from "@/components/ui/Paragraph";
+import RedirectButton from "@/components/ui/RedirectButton";
 import Title from "@/components/ui/Title";
 import { UserProfile, currentUser } from "@clerk/nextjs";
+import { BsPlus } from "react-icons/bs";
 
 export default async function Dashboard() {
 
@@ -18,7 +20,7 @@ export default async function Dashboard() {
         </Paragraph>
       </div>
 
-      <NewDiscussionBtn />
+      <RedirectButton href="/new-discussion" icon={<BsPlus />} text={"New Discussion"} />
 
       <div className="flex flex-col w-full overflow-x-hidden items-start justify-start gap-4 pl-4 max-sm:items-center max-sm:justify-center">
         <h2 className="text-[2.3rem] max-sm:text-[2rem] font-bold max-sm:text-center">My Discussions</h2>
