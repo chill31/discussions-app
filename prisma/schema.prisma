@@ -18,6 +18,7 @@ model Discussion {
   upvotes   Int       @default(0)
   downvotes Int       @default(0)
   tags      String[]  @default([])
+  unlisted  Boolean   @default(false)
   authorId  String
   closed    Boolean   @default(false)
   comments  Comment[]
@@ -32,4 +33,13 @@ model Comment {
   downvotes      Int         @default(0)
   Discussion     Discussion? @relation(fields: [discussionId], references: [id], onDelete: Cascade)
   discussionId   String?
+}
+
+model Notification {
+  forUserId    String
+  fromUserId   String
+  id           String @unique @default(uuid())
+  discussionId String
+  content      String
+  read         Boolean @default(false)
 }

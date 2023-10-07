@@ -17,21 +17,23 @@ import {
   ModalFooter,
 } from "@nextui-org/modal";
 import { useState } from "react";
-import {useRouter} from 'next/navigation'
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 import ReactMarkdown from "react-markdown";
 
 import { CreateSchema } from "@/helpers/types/createSchema";
+import { Checkbox } from "@nextui-org/checkbox";
+import { Tooltip } from "@nextui-org/react";
 
 export default function NewDiscussion() {
-
   const router = useRouter();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tagInputValue, setTagInputValue] = useState("");
   const [tags, setTags] = useState<string[]>([]);
+  const [isUnlisted, setIsUnlisted] = useState(false);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -90,8 +92,10 @@ export default function NewDiscussion() {
       content,
       title,
       tags,
+      unlisted: isUnlisted,
     };
-    const hostScheme = window.location.host === "localhost:3000" ? "http://" : "https://";
+    const hostScheme =
+      window.location.host === "localhost:3000" ? "http://" : "https://";
     fetch(hostScheme + window.location.host + "/api/discussion/create", {
       method: "POST",
       body: JSON.stringify(data),
@@ -101,7 +105,7 @@ export default function NewDiscussion() {
         if (recieved.msg.endsWith("[200]")) {
           toast.success("Discussion created");
           router.refresh();
-          router.push('/dashboard');
+          router.push("/dashboard");
         } else {
           toast.error("Error in creating discussion");
         }
@@ -154,6 +158,12 @@ export default function NewDiscussion() {
           onInputChange={handleTagInputChange}
           onTagDelete={handleTagDelete}
         />
+        <span className="w-[45rem] max-w-[92%] flex items-center justify-start gap-4">
+          <Tooltip content="whether the discussion will be accessible by link only or on home page">
+            <span>Unlisted?</span>
+          </Tooltip>
+          <Checkbox isSelected={isUnlisted} onChange={(e: any) => setIsUnlisted(e.target.checked)} />
+        </span>
         <div className="w-[45rem] max-w-[92%] flex flex-col items-end justify-center">
           <Button
             color="primary"

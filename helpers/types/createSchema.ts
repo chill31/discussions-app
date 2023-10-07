@@ -3,4 +3,5 @@ export type CreateSchema = {
   title: string;
   content: string;
   tags: string[];
+  unlisted: boolean
 }

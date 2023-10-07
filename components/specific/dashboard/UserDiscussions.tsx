@@ -9,6 +9,7 @@ import { Chip } from "@nextui-org/chip";
 import Button from "@/components/ui/Button";
 import { BsBoxArrowUpRight, BsTrash } from "react-icons/bs";
 import { useRouter } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export default function UserDiscussions({
   userId,
@@ -66,7 +67,8 @@ export default function UserDiscussions({
         console.log(data);
         if (data.msg.endsWith("[200]")) {
           toast.success("Discussion deleted");
-          router.refresh();
+          router.back();
+          router.forward();
         } else {
           toast.error("Could not delete discussion");
         }
@@ -94,7 +96,18 @@ export default function UserDiscussions({
               Open
             </Chip>
           )}
-          <p className="text-gray-300 mt-4">{discussion.content}</p>
+          {discussion.unlisted ? (
+            <Chip color="warning" size="lg">
+              Unlisted
+            </Chip>
+          ) : (
+            <Chip color="success" size="lg">
+              Public
+            </Chip>
+          )}
+          <p className="dark:text-gray-300 text-gray-700 mt-4">
+            {discussion.content}
+          </p>
 
           <div className="flex flex-wrap items-center justify-start gap-3">
             <span>Tags:</span>
@@ -121,7 +134,7 @@ export default function UserDiscussions({
               color="primary"
               size="sm"
               isIconOnly={true}
-              onClick={() => router.push(`/discussions/${discussion.id}`)}
+              onClick={() => router.push(`/discussion/${discussion.id}`)}
             >
               <BsBoxArrowUpRight />
             </Button>

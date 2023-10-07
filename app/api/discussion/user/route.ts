@@ -1,7 +1,7 @@
 import { PrismaClient, Discussion } from "@prisma/client";
 const prisma = new PrismaClient();
 
-export async function POST(req: Response) {
+export async function POST(req: Request) {
   const {userId}: {userId: string} = await req.json();
   try {
 
