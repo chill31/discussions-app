@@ -18,7 +18,7 @@ export default function Header() {
   }
 
   return (
-    <header className="flex items-center justify-end gap-2 w-[100vw] py-6 px-6 max-sm:justify-center max-sm:gap-4 max-sm:px-0 header">
+    <header className="flex items-center justify-end gap-2 w-screen py-6 px-6 max-sm:justify-center max-sm:gap-4 max-sm:px-0 header">
       <Button
         isIconOnly={true}
         onClick={() => redirect("/")}

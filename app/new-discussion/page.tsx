@@ -17,11 +17,17 @@ import {
   ModalFooter,
 } from "@nextui-org/modal";
 import { useState } from "react";
+import {useRouter} from 'next/navigation'
 import toast from "react-hot-toast";
 
 import ReactMarkdown from "react-markdown";
 
+import { CreateSchema } from "@/helpers/types/createSchema";
+
 export default function NewDiscussion() {
+
+  const router = useRouter();
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tagInputValue, setTagInputValue] = useState("");
@@ -32,8 +38,9 @@ export default function NewDiscussion() {
   const [fileName, setFileName] = useState("");
   const [fileLink, setFileLink] = useState("");
 
+  const [isCreating, setIsCreating] = useState(false);
+
   function handleTagInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    console.log(e.key);
     if (e.key === "Enter") {
       if (tags.length >= 5) return toast.error("You can only add 5 tags");
       if (e.currentTarget.value.length > 15)
@@ -46,7 +53,7 @@ export default function NewDiscussion() {
       setTags([...tags, e.currentTarget.value]);
       setTagInputValue("");
     }
-    if(e.key === ',') {
+    if (e.key === ",") {
       if (tags.length >= 5) return toast.error("You can only add 5 tags");
       if (e.currentTarget.value.length > 15)
         return toast.error("Tag cannot exceed 15 characters");
@@ -75,6 +82,31 @@ export default function NewDiscussion() {
     if (tag !== undefined) {
       setTags(tags.filter((t) => t !== tag));
     }
+  }
+
+  function createDiscussion() {
+    setIsCreating(true);
+    const data: CreateSchema = {
+      content,
+      title,
+      tags,
+    };
+    const hostScheme = window.location.host === "localhost:3000" ? "http://" : "https://";
+    fetch(hostScheme + window.location.host + "/api/discussion/create", {
+      method: "POST",
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((recieved) => {
+        if (recieved.msg.endsWith("[200]")) {
+          toast.success("Discussion created");
+          router.refresh();
+          router.push('/dashboard');
+        } else {
+          toast.error("Error in creating discussion");
+        }
+        setIsCreating(false);
+      });
   }
 
   return (
@@ -123,7 +155,20 @@ export default function NewDiscussion() {
           onTagDelete={handleTagDelete}
         />
         <div className="w-[45rem] max-w-[92%] flex flex-col items-end justify-center">
-          <Button color="primary" className="self-end">
+          <Button
+            color="primary"
+            className="self-end"
+            onClick={() => {
+              if (title.length < 5)
+                return toast.error("Title must be at least 5 characters long");
+              if (content.length < 10)
+                return toast.error(
+                  "Content must be at least 10 characters long"
+                );
+              createDiscussion();
+            }}
+            isLoading={isCreating}
+          >
             Confirm
           </Button>
         </div>

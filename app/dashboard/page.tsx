@@ -1,12 +1,14 @@
 import Container from "@/components/page/Container";
+import UserDiscussions from "@/components/specific/dashboard/UserDiscussions";
 import NewDiscussionBtn from "@/components/specific/dashboard/newDiscussBtn";
-import Button from "@/components/ui/Button";
 import Paragraph from "@/components/ui/Paragraph";
 import Title from "@/components/ui/Title";
-import { UserProfile } from "@clerk/nextjs";
-import { BsPlus } from "react-icons/bs";
+import { UserProfile, currentUser } from "@clerk/nextjs";
 
-export default function Dashboard() {
+export default async function Dashboard() {
+
+  const user = await currentUser();
+
   return (
     <Container>
       <div className="flex flex-col items-center justify-start gap-4">
@@ -20,7 +22,7 @@ export default function Dashboard() {
 
       <div className="flex flex-col w-full overflow-x-hidden items-start justify-start gap-4 pl-4 max-sm:items-center max-sm:justify-center">
         <h2 className="text-[2.3rem] max-sm:text-[2rem] font-bold max-sm:text-center">My Discussions</h2>
-        <p className="dark:text-gray-300 text-gray-600 max-sm:text-center">You have no current discussions.</p>
+        <UserDiscussions userId={user?.id ?? ''} URL={process.env.URL ?? "https://chill31-discussions.vercel.app"} />
       </div>
 
       <div className="flex flex-col w-full overflow-x-hidden items-start justify-start gap-4 pl-4 max-sm:items-center max-sm:justify-center">
