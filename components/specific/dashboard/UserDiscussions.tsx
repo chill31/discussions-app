@@ -82,7 +82,7 @@ export default function UserDiscussions({
       {discussions.map((discussion: Discussion, k: number) => (
         <div
           key={k}
-          className="px-2 py-4 flex flex-col gap-4 items-start justify-start rounded-lg dark:bg-white/10 bg-black/20 w-[35rem] max-w-[calc(100vw-2rem)]"
+          className="px-2 py-4 flex flex-col gap-4 items-start justify-start rounded-lg dark:bg-white/10 bg-zinc-300 w-[35rem] max-w-[calc(100vw-2rem)]"
         >
           <h2 className="font-bold text-[1.6rem]">
             {showTruncated(discussion.title, 20)}
@@ -141,6 +141,7 @@ export default function UserDiscussions({
             <Button
               size="sm"
               isIconOnly={true}
+              color='primary'
               onClick={() => router.push(`/edit/${discussion.id}`)}
             >
               <BsPencilSquare />

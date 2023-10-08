@@ -6,16 +6,18 @@ export default function TagInput({
   inputValue,
   onInputChange,
   onInputKeyDown,
-  onTagDelete
+  onTagDelete,
+  className
 }: {
   tags: string[];
   inputValue: string;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onInputKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onTagDelete: (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
+  className?: string;
 }) {
   return (
-    <div className="flex flex-col items-center justify-start gap-4 flex-wrap">
+    <div className={`flex flex-col items-center justify-start gap-4 flex-wrap ${className ? className : ''}`}>
       <div className="flex items-center justify-start gap-2 w-full flex-wrap max-w-[90vw]">
         {tags.map((tag: string, index: number) => (
           <span
