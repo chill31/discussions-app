@@ -271,15 +271,17 @@ export default function Comments({
         </Button>
       </div>
 
-      {discussion.closed ? null : (
-        <Button
-          color="secondary"
-          onClick={() => makeClosed(discussion.id, "_")}
-          className="mt-12 self-center"
-        >
-          Close without comment
-        </Button>
-      )}
+      {discussion.closed ? null : isSignedIn ? (
+        user.id === discussion.authorId ? (
+          <Button
+            color="secondary"
+            onClick={() => makeClosed(discussion.id, "_")}
+            className="mt-12 self-center"
+          >
+            Close without comment
+          </Button>
+        ) : null
+      ) : null}
     </div>
   );
 }
