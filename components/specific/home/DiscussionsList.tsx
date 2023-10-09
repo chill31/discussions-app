@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BsBoxArrowUpRight, BsExclamationCircle, BsInfoCircle } from "react-icons/bs";
+import {
+  BsBoxArrowUpRight,
+  BsExclamationCircle,
+  BsInfoCircle,
+} from "react-icons/bs";
 
 import { type Discussion } from "@prisma/client";
 import { Input } from "@nextui-org/input";
@@ -10,6 +14,7 @@ import RedirectButton from "@/components/ui/RedirectButton";
 import TagInput from "@/components/ui/TagInput";
 import toast from "react-hot-toast";
 import { Checkbox } from "@nextui-org/react";
+import Button from "@/components/ui/Button";
 
 export default function DiscussionsList({ URL }: { URL: string }) {
   const [isError, setIsError] = useState(false);
@@ -19,39 +24,11 @@ export default function DiscussionsList({ URL }: { URL: string }) {
   const [tags, setTags] = useState<string[]>([]);
   const [tagInputValue, setTagInputValue] = useState("");
   const [discussions, setDiscussions] = useState<Discussion[]>([]);
+  const [filteredDiscussions, setFilteredDiscussions] = useState<Discussion[]>([]);
 
   const [onlyOpen, setOnlyOpen] = useState(true);
   const [onlyClosed, setOnlyClosed] = useState(true);
   const [strictTagChecking, setStrictTagChecking] = useState(true);
-  const filteredDiscussions = discussions.filter((discussion) => {
-    const isOpen = !discussion.closed;
-    const matchesInput = discussion.title.toLowerCase().includes(inputValue.toLowerCase());
-    
-    // Check if there are tags to match, or if strictTagChecking is disabled
-    const hasTagsToMatch = tags.length === 0 || !strictTagChecking;
-  
-    // Check tag matching based on strictTagChecking setting and available tags
-    const hasAllTags = hasTagsToMatch
-      ? true // Return true if no tags are specified or strictTagChecking is disabled
-      : tags.every((tag) => discussion.tags.includes(tag)); // strict tag checking
-  
-    if (!onlyOpen && !onlyClosed) {
-      return false;
-    }
-  
-    if (onlyOpen !== onlyClosed) {
-      if ((onlyOpen && isOpen) || (onlyClosed && !isOpen)) {
-        return matchesInput && hasAllTags;
-      }
-    } else {
-      return hasAllTags && matchesInput;
-    }
-  
-    return false;
-  });
-  
-  
-  
 
   useEffect(() => {
     fetch(URL + "/api/discussion/get", {
@@ -62,12 +39,77 @@ export default function DiscussionsList({ URL }: { URL: string }) {
       .then((data) => {
         if (data.msg.endsWith("[200]")) {
           setDiscussions(data.discussions);
+          setFilteredDiscussions(data.discussions);
           setIsFetching(false);
         } else {
           setIsError(true);
         }
       });
   }, [URL]);
+
+  function filterDiscussions() {
+    const myFilteredDiscussions = discussions.filter((discussion) => {
+      if (strictTagChecking) {
+        const isOpen = !discussion.closed;
+        const matchesInput = discussion.title
+          .toLowerCase()
+          .includes(inputValue.toLowerCase());
+
+        const hasTagsToMatch = tags.length === 0 || !strictTagChecking;
+
+        const hasAllTags = hasTagsToMatch
+          ? true
+          : tags.every((tag) => discussion.tags.includes(tag));
+
+        if (!onlyOpen && !onlyClosed) {
+          return false;
+        }
+
+        if (onlyOpen !== onlyClosed) {
+          if ((onlyOpen && isOpen) || (onlyClosed && !isOpen)) {
+            return matchesInput && hasAllTags;
+          }
+        } else {
+          return hasAllTags && matchesInput;
+        }
+
+        return false;
+      } else {
+        const isOpen = !discussion.closed;
+        const matchesInput = discussion.title
+          .toLowerCase()
+          .includes(inputValue.toLowerCase());
+
+        if (!onlyOpen && !onlyClosed) {
+          return false;
+        }
+
+        if (onlyOpen !== onlyClosed) {
+          if ((onlyOpen && isOpen) || (onlyClosed && !isOpen)) {
+            if (tags.length === 0) {
+              return matchesInput;
+            } else {
+              return (
+                matchesInput &&
+                discussion.tags.some((tag) => tags.includes(tag))
+              );
+            }
+          }
+        } else {
+          if (tags.length === 0) {
+            return matchesInput;
+          } else {
+            return (
+              matchesInput && discussion.tags.some((tag) => tags.includes(tag))
+            );
+          }
+        }
+
+        return false;
+      }
+    });
+    setFilteredDiscussions(myFilteredDiscussions);
+  }
 
   if (isError) {
     return (
@@ -142,7 +184,7 @@ export default function DiscussionsList({ URL }: { URL: string }) {
   return (
     <div className="w-screen px-4 flex flex-col gap-8 items-start justify-start">
       <Input
-        className="w-[35rem] max-w-[100%]"
+        className="w-[45rem] max-w-[92vw]"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         size="lg"
@@ -163,13 +205,18 @@ export default function DiscussionsList({ URL }: { URL: string }) {
           <Checkbox
             isSelected={strictTagChecking}
             onChange={(e) => {
-              setStrictTagChecking((prev) => !prev);
+              setStrictTagChecking(e.target.checked);
             }}
             color="primary"
             className="cursor-pointer"
           />
         </div>
-        <span className="text-gray-500 text-sm inline mr-5">If strict tag checking is enabled, then the tags you entered will be checked with all of the tags of the discussions, and if it is disabled, then only one of the tags of the discussions will be matched with your tags.</span>
+        <span className="text-gray-500 text-sm inline max-w-[calc(92vw-2rem)]">
+          If strict tag checking is enabled, then the tags you entered will be
+          checked with all of the tags of the discussions, and if it is
+          disabled, then only one of the tags of the discussions will be matched
+          with your tags.
+        </span>
       </div>
       <div className="flex flex-wrap gap-2 items-center justify-start mt-5">
         <Chip
@@ -189,6 +236,8 @@ export default function DiscussionsList({ URL }: { URL: string }) {
           Closed
         </Chip>
       </div>
+
+      <Button className="w-[92%]" color="primary" onClick={filterDiscussions}>Search</Button>
 
       <div className="flex flex-wrap items-center justify-start gap-4 w-full mt-5">
         {filteredDiscussions.map((discussion: Discussion, k: number) => (

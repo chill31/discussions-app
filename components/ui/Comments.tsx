@@ -162,7 +162,7 @@ export default function Comments({
         <div
           className={`flex flex-col border-2 border-transparent items-start justify-start gap-4 dark:bg-white/10 bg-zinc-300 py-4 rounded-md px-2 w-full ${
             comment.isCloseComment
-              ? "border-black !bg-blue-400 dark:!bg-blue-600"
+              ? "border-black !bg-secondary-400 dark:!bg-secondary-100 text-slate-200 prose-strong:text-slate-200"
               : ""
           }`}
           key={k}
@@ -210,6 +210,15 @@ export default function Comments({
                   {comment.isCloseComment ? "Marked as closing comment" : ""}
                 </Chip>
               )
+            ) : null}
+            {discussion.authorId !== user?.id && discussion.closed ? (
+              <Chip
+                color="secondary"
+                size="lg"
+                className={`${comment.isCloseComment ? "" : "hidden"}`}
+              >
+                {comment.isCloseComment ? "Marked as closing comment" : ""}
+              </Chip>
             ) : null}
             {comment.authorId === user?.id ? (
               <Button

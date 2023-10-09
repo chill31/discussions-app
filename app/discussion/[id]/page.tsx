@@ -47,6 +47,16 @@ export default async function Discussion({
     <Container>
       <Prose>
         <h1>{data.discussion?.title}</h1>
+        {data.discussion?.tags.map((tag: string, k: number) => (
+          <span key={k}>
+            <Chip size="lg"># {tag}</Chip>
+            {k === data.discussion?.tags.length - 1 ? "" : "  "}
+          </span>
+        ))}
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
         <User
           name={data.userData.name}
           avatarProps={{ src: data.userData.avatarURL }}
@@ -55,20 +65,17 @@ export default async function Discussion({
           }}
         />
         <br></br>
-        <br></br>
         created at{" "}
         <strong>
           {new Date(data.discussion?.created ?? new Date()).toLocaleString()}
         </strong>
-        <br></br>
-        <br></br>
-          Tags:{" "}
-          {data.discussion?.tags.map((tag: string, k: number) => (
-            <span key={k}>
-              <Chip size='lg'># {tag}</Chip>
-              {k === data.discussion?.tags.length - 1 ? "" : ", "}
-              </span>
-          ))}
+        {data.discussion.closed ? (
+          <>
+            <br></br>
+            <br></br>
+            <Chip color="secondary" size='lg' className="!p-4">Closed</Chip>
+          </>
+        ) : null}
         <hr />
         <ReactMarkdown>{`${data.discussion?.content}
   `}</ReactMarkdown>

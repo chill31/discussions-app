@@ -17,7 +17,7 @@ export default function TagInput({
   className?: string;
 }) {
   return (
-    <div className={`flex flex-col items-center justify-start gap-4 flex-wrap ${className ? className : ''}`}>
+    <div className={`flex flex-col items-center justify-start gap-4 flex-wrap ${className}`}>
       <div className="flex items-center justify-start gap-2 w-full flex-wrap max-w-[90vw]">
         {tags.map((tag: string, index: number) => (
           <span
