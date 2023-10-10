@@ -1,5 +1,6 @@
 import Container from "@/components/page/Container";
 import UserDiscussions from "@/components/specific/dashboard/UserDiscussions";
+import UserNotifications from "@/components/specific/dashboard/UserNotifications";
 import NewDiscussionBtn from "@/components/specific/dashboard/newDiscussBtn";
 import Paragraph from "@/components/ui/Paragraph";
 import RedirectButton from "@/components/ui/RedirectButton";
@@ -29,7 +30,7 @@ export default async function Dashboard() {
 
       <div className="flex flex-col w-full overflow-x-hidden items-start justify-start gap-4 pl-4 max-sm:items-center max-sm:justify-center">
         <h2 className="text-[2.3rem] max-sm:text-[2rem] font-bold max-sm:text-center">Notifications</h2>
-        <p className="dark:text-gray-300 text-gray-600 mr-2 max-sm:text-center">No notifications. Create a discussion, or contribute to others&apos; to recieve notifications about that discussion</p>
+        <UserNotifications URL={process.env.URL ?? 'https://chill31-discussions.vercel.app'} userId={user?.id ?? ""} />
       </div>
 
       <div className="flex flex-col w-full overflow-x-hidden items-start justify-start gap-4 pl-4 max-sm:items-center max-sm:justify-center">

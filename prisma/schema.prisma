@@ -22,6 +22,8 @@ model Discussion {
   authorId  String
   closed    Boolean   @default(false)
   comments  Comment[]
+  upvotedBy String[]  @default([])
+  downvotedBy String[] @default([])
 }
 
 model Comment {
@@ -33,6 +35,8 @@ model Comment {
   downvotes      Int         @default(0)
   Discussion     Discussion? @relation(fields: [discussionId], references: [id], onDelete: Cascade)
   discussionId   String?
+  upvotedBy      String[]    @default([])
+  downvotedBy    String[]    @default([])
 }
 
 model Notification {

@@ -243,7 +243,7 @@ export default function DiscussionsList({ URL }: { URL: string }) {
         {filteredDiscussions.map((discussion: Discussion, k: number) => (
           <div
             key={k}
-            className={`w-[30rem] max-w-[calc(100vw-2rem)] py-4 px-3 dark:bg-white/10 bg-zinc-300 flex flex-col items-start justify-start gap-4 rounded-xl`}
+            className={`w-[30rem] max-w-[calc(100vw-2rem)] py-4 px-3 dark:bg-white/10 bg-zinc-300 flex flex-col items-start justify-start gap-4 rounded-xl min-h-[18rem] h-fit overflow-scroll`}
           >
             <h3 className="font-semibold text-[1.9rem]">{discussion.title}</h3>
             {discussion.closed ? (
@@ -258,14 +258,15 @@ export default function DiscussionsList({ URL }: { URL: string }) {
                   # {tag}
                 </Chip>
               ))}
+              {discussion.tags.length === 0 && <span className="text-gray-400">No tags</span>}
             </div>
             <RedirectButton
               href={`/discussion/${discussion.id}`}
               isIconOnly={true}
               color="primary"
-              className="self-end"
+              className="mt-auto ml-auto"
             >
-              {<BsBoxArrowUpRight />}
+              <BsBoxArrowUpRight />
             </RedirectButton>
           </div>
         ))}
