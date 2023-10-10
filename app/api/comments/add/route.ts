@@ -27,6 +27,7 @@ export async function POST(req: Request) {
         discussionId: discussionId,
         forUserId: discussion?.authorId ?? "",
         fromUserId: user?.id as string,
+        discussionTitle: discussion?.title ?? "",
       }
     });
 

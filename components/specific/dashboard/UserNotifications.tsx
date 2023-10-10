@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-import { Notification as N } from "@prisma/client";
+import { Notification } from "@prisma/client";
 import { Chip } from "@nextui-org/chip";
 import Button from "@/components/ui/Button";
 import { BsBoxArrowUpRight, BsPencilSquare, BsTrash } from "react-icons/bs";
@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import { User } from "@nextui-org/user";
 
-type Notification = N & {discussionTitle: string}
 type UserData = { username: string; avatarURL: string; fromUserId: string }
 
 export default function UserNotifications({
