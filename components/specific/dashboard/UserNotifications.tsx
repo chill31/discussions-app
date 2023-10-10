@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-import { Notification } from "@prisma/client";
+import { Notification as N } from "@prisma/client";
 import { Chip } from "@nextui-org/chip";
 import Button from "@/components/ui/Button";
 import { BsBoxArrowUpRight, BsPencilSquare, BsTrash } from "react-icons/bs";
@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import { User } from "@nextui-org/user";
 
+type Notification = N & {discussionTitle: string}
 type UserData = { username: string; avatarURL: string; fromUserId: string }
 
 export default function UserNotifications({
@@ -122,9 +123,11 @@ export default function UserNotifications({
           <span className="font-semibold dark:text-gray-300 text-gray-700">From</span>
           <User name={userData?.find((data, i) => i === k)?.username} avatarProps={{
             src: userData?.find((data, i) => i === k)?.avatarURL
-          }} className="bg-white/20 p-2 w-full justify-start overflow-hidden" />
+          }} className="bg-white/20 p-2 w-full justify-start overflow-hidden rounded-md" />
           <br />
           <br />
+          <span className="font-semibold dark:text-gray-300 text-gray-700">Discussion</span>
+          <div className="py-4 px-2 bg-white/20 w-full overflow-ellipsis overflow-hidden whitespace-nowrap rounded-md">{notification.discussionTitle}</div>
           {notification.read ? (
             <Chip size="lg" color='primary'>Read</Chip>
           ) : (

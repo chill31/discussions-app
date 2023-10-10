@@ -24,7 +24,21 @@ export async function POST(req: Request) {
       })
     );
 
-    return new Response(JSON.stringify({ msg: 'success [200]', notifications, userData }), { status: 200 });
+    const notificationsWithDiscussionTitle = await Promise.all(
+      notifications.map(async (notif) => {
+        const discussion = await prisma.discussion.findUnique({
+          where: {
+            id: notif.discussionId,
+          },
+        });
+        return {
+          ...notif,
+          discussionTitle: discussion?.title,
+        };
+      })
+    );
+
+    return new Response(JSON.stringify({ msg: 'success [200]', notifications: notificationsWithDiscussionTitle, userData }), { status: 200 });
 
   } catch (e) {
     console.log(e);
