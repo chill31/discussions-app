@@ -154,20 +154,20 @@ export default function UserNotifications({
 
           <div className="self-end flex items-center justify-end gap-1 w-full relative">
             {notification.read ? null : (
-            <Button className="absolute left-0" onClick={() => markAsRead(notification.id)}>Mark as Read</Button>
+            <Button className="absolute left-0" onPress={() => markAsRead(notification.id)}>Mark as Read</Button>
             )}
             <Button
               color="danger"
               isIconOnly={true}
               isLoading={deleteButtonLoading}
-              onClick={() => deleteNotification(notification.id)}
+              onPress={() => deleteNotification(notification.id)}
             >
               <BsTrash />
             </Button>
             <Button
               color="primary"
               isIconOnly={true}
-              onClick={() => router.push(`/discussion/${notification.discussionId}`)}
+              onPress={() => router.push(`/discussion/${notification.discussionId}`)}
             >
               <BsBoxArrowUpRight />
             </Button>

@@ -21,14 +21,14 @@ export default function Header() {
     <header className="flex items-center justify-end gap-2 w-screen py-6 px-6 max-sm:justify-center max-sm:gap-4 max-sm:px-0 header">
       <Button
         isIconOnly={true}
-        onClick={() => redirect("/")}
+        onPress={() => redirect("/")}
         className="text-lg"
       >
         <BsHouse />
       </Button>
       <Button
         isIconOnly={true}
-        onClick={() => redirect("/dashboard")}
+        onPress={() => redirect("/dashboard")}
         className="text-lg"
       >
         <BsGear />
@@ -37,7 +37,7 @@ export default function Header() {
       {user !== null ? (
         <UserButton />
       ) : (
-        <Button onClick={() => redirect("/login")} isIconOnly={true}>
+        <Button onPress={() => redirect("/login")} isIconOnly={true}>
           <LuLogIn />
         </Button>
       )}

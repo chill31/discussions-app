@@ -125,7 +125,7 @@ export default function UserDiscussions({
               color="danger"
               size="sm"
               isIconOnly={true}
-              onClick={() => deleteDiscussion(discussion.id)}
+              onPress={() => deleteDiscussion(discussion.id)}
               isLoading={deleteButtonLoading}
             >
               <BsTrash />
@@ -134,7 +134,7 @@ export default function UserDiscussions({
               color="primary"
               size="sm"
               isIconOnly={true}
-              onClick={() => router.push(`/discussion/${discussion.id}`)}
+              onPress={() => router.push(`/discussion/${discussion.id}`)}
             >
               <BsBoxArrowUpRight />
             </Button>
@@ -142,7 +142,7 @@ export default function UserDiscussions({
               size="sm"
               isIconOnly={true}
               color='primary'
-              onClick={() => router.push(`/edit/${discussion.id}`)}
+              onPress={() => router.push(`/edit/${discussion.id}`)}
             >
               <BsPencilSquare />
             </Button>

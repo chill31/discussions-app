@@ -14,7 +14,7 @@ export default function NewDiscussionBtn() {
   }
 
   return (
-    <Button onClick={redirect}>
+    <Button onPress={() => redirect()}>
       <BsPlus />
       New Discussion
     </Button>

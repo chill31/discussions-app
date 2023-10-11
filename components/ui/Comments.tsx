@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import {
   BsCheck2Circle,
   BsExclamationCircle,
+  BsPencilSquare,
   BsPlus,
   BsTrash,
 } from "react-icons/bs";
@@ -17,6 +18,14 @@ import { User } from "@nextui-org/user";
 import { useUser } from "@clerk/nextjs";
 import { Chip } from "@nextui-org/chip";
 import { useRouter } from "next/navigation";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from "@nextui-org/modal";
 
 export default function Comments({
   id,
@@ -60,6 +69,19 @@ export default function Comments({
         }
       });
   }, [URL, id]);
+
+    // modal for editing comment
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [editCommentModalContent, setEditCommentModalContent] = useState("");
+    const [editCommentId, setEditCommentId] = useState("");
+    const [isEditing, setIsEditing] = useState(false);
+    function openEditModal(id: string) {
+      setEditCommentModalContent(
+        comments.find((comment) => comment.id === id)?.content ?? ""
+      );
+      setEditCommentId(id);
+      onOpen();
+    }
 
   if (isLoading) {
     return <span className="!mt-10">Loading comments</span>;
@@ -155,6 +177,29 @@ export default function Comments({
     }
   }
 
+  function editComment(closeFn: () => void) {
+    setIsEditing(true);
+    fetch(URL + "/api/comments/edit", {
+      method: 'POST',
+      body: JSON.stringify({ commentId: editCommentId, content: editCommentModalContent })
+    }).then(res => res.json()).then(data => {
+      if(data.msg.endsWith('[500]')) {
+        toast.error('Could not edit comment');
+      } else {
+        toast.success('Comment edited successfully');
+        setComments(prev => prev.map(comment => {
+          if(comment.id === editCommentId) {
+            return {...comment, content: editCommentModalContent}
+          } else {
+            return comment;
+          }
+        }))
+      }
+      closeFn();
+      setIsEditing(false);
+    });
+  }
+
   return (
     <div className="flex flex-col items-start justify-start gap-4">
       {/* COMMENTS MAP */}
@@ -197,7 +242,7 @@ export default function Comments({
               !discussion.closed ? (
                 <Button
                   color="secondary"
-                  onClick={() => makeClosed(discussion.id, comment.id)}
+                  onPress={() => makeClosed(discussion.id, comment.id)}
                 >
                   <BsCheck2Circle className="text-xl" /> Close with comment
                 </Button>
@@ -221,13 +266,22 @@ export default function Comments({
               </Chip>
             ) : null}
             {comment.authorId === user?.id ? (
-              <Button
-                isIconOnly={true}
-                color="danger"
-                onClick={() => deleteComment(comment.id)}
-              >
-                <BsTrash />
-              </Button>
+              <>
+                <Button
+                  isIconOnly={true}
+                  onPress={() => openEditModal(comment.id)}
+                  isLoading={isEditing}
+                >
+                  <BsPencilSquare />
+                </Button>
+                <Button
+                  isIconOnly={true}
+                  color="danger"
+                  onPress={() => deleteComment(comment.id)}
+                >
+                  <BsTrash />
+                </Button>
+              </>
             ) : null}
           </div>
         </div>
@@ -240,7 +294,7 @@ export default function Comments({
           <Button
             color="primary"
             className="mt-6"
-            onClick={() => setCommentFormVisible(true)}
+            onPress={() => setCommentFormVisible(true)}
           >
             <BsPlus /> Add a comment
           </Button>
@@ -248,7 +302,7 @@ export default function Comments({
           <span>Discussion is closed. You cannot add anymore comments</span>
         ))
       ) : (
-        <Button color="danger" onClick={() => setCommentFormVisible(false)}>
+        <Button color="danger" onPress={() => setCommentFormVisible(false)}>
           Cancel
         </Button>
       )}
@@ -269,11 +323,17 @@ export default function Comments({
           placeholder="enter your comment"
           maxLength={500}
           maxRows={15}
+          description={`${commentContent.length}/500`}
+          classNames={{
+            description: `self-end mb-4 ${
+              commentContent.length >= 500 ? "text-red-500" : "text-slate-500"
+            }`,
+          }}
         />
         <Button
           color="primary"
           className="self-end"
-          onClick={addComment}
+          onPress={() => addComment()}
           isLoading={commentButtonLoading}
         >
           Confirm
@@ -284,13 +344,59 @@ export default function Comments({
         user.id === discussion.authorId ? (
           <Button
             color="secondary"
-            onClick={() => makeClosed(discussion.id, "_")}
+            onPress={() => makeClosed(discussion.id, "_")}
             className="mt-12 self-center"
           >
             Close without comment
           </Button>
         ) : null
       ) : null}
+
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        classNames={{
+          base: "gap-4",
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 text-3xl">
+                Edit Comment
+              </ModalHeader>
+              <ModalBody>
+                <Textarea
+                  value={editCommentModalContent}
+                  onChange={(e) => {
+                    setEditCommentModalContent(e.target.value);
+                  }}
+                  radius="sm"
+                  placeholder="enter your comment"
+                  maxLength={500}
+                  maxRows={10}
+                  description={`${editCommentModalContent.length}/500`}
+                  classNames={{
+                    description: `self-end mb-4 ${
+                      editCommentModalContent.length >= 500
+                        ? "text-red-500"
+                        : "text-slate-500"
+                    }`,
+                  }}
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="bordered" onPress={onClose}>
+                  Cancel
+                </Button>
+                <Button color="primary" onPress={() => editComment(onClose)} isLoading={isEditing}>
+                  Confirm
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

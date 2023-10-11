@@ -173,7 +173,7 @@ export default function EditDiscussionForm({ id, URL, defaultData }: { id: strin
             <Button
               color="primary"
               className="self-end"
-              onClick={() => {
+              onPress={() => {
                 if (title.length < 5)
                   return toast.error(
                     "Title must be at least 5 characters long"
@@ -209,7 +209,7 @@ export default function EditDiscussionForm({ id, URL, defaultData }: { id: strin
                 </ModalBody>
                 <ModalFooter>
                   <Button
-                    onClick={() =>
+                    onPress={() =>
                       navigator.clipboard.writeText(
                         `![${fileName}](${fileLink})`
                       )

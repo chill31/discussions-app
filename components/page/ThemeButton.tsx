@@ -16,7 +16,7 @@ export default function ThemeButton() {
   if (!mounted) return null;
 
   return (
-    <Button onClick={() => {
+    <Button onPress={() => {
       setTheme(theme === 'dark' ? 'light' : 'dark');
     }} isIconOnly={true} className="text-lg">
       {theme === 'dark' ? <BsMoon /> : <BsSun />}

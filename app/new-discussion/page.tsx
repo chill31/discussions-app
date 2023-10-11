@@ -168,7 +168,7 @@ export default function NewDiscussion() {
           <Button
             color="primary"
             className="self-end"
-            onClick={() => {
+            onPress={() => {
               if (title.length < 5)
                 return toast.error("Title must be at least 5 characters long");
               if (content.length < 10)
@@ -202,7 +202,7 @@ export default function NewDiscussion() {
               </ModalBody>
               <ModalFooter>
                 <Button
-                  onClick={() =>
+                  onPress={() =>
                     navigator.clipboard.writeText(`![${fileName}](${fileLink})`)
                   }
                 >

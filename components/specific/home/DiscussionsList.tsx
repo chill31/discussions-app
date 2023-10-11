@@ -223,7 +223,7 @@ export default function DiscussionsList({ URL }: { URL: string }) {
           color={onlyOpen ? "primary" : "default"}
           size="lg"
           className="cursor-pointer transition-background"
-          onClick={() => setOnlyOpen((prev) => !prev)}
+          onPress={() => setOnlyOpen((prev) => !prev)}
         >
           Open
         </Chip>
@@ -231,13 +231,13 @@ export default function DiscussionsList({ URL }: { URL: string }) {
           color={onlyClosed ? "primary" : "default"}
           size="lg"
           className="cursor-pointer transition-background"
-          onClick={() => setOnlyClosed((prev) => !prev)}
+          onPress={() => setOnlyClosed((prev) => !prev)}
         >
           Closed
         </Chip>
       </div>
 
-      <Button className="w-[92%]" color="primary" onClick={filterDiscussions}>Search</Button>
+      <Button className="w-[92%]" color="primary" onPress={filterDiscussions}>Search</Button>
 
       <div className="flex flex-wrap items-center justify-start gap-4 w-full mt-5">
         {filteredDiscussions.map((discussion: Discussion, k: number) => (
