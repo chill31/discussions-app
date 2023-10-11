@@ -223,7 +223,7 @@ export default function DiscussionsList({ URL }: { URL: string }) {
           color={onlyOpen ? "primary" : "default"}
           size="lg"
           className="cursor-pointer transition-background"
-          onPress={() => setOnlyOpen((prev) => !prev)}
+          onClick={() => setOnlyOpen((prev) => !prev)}
         >
           Open
         </Chip>
@@ -231,7 +231,7 @@ export default function DiscussionsList({ URL }: { URL: string }) {
           color={onlyClosed ? "primary" : "default"}
           size="lg"
           className="cursor-pointer transition-background"
-          onPress={() => setOnlyClosed((prev) => !prev)}
+          onClick={() => setOnlyClosed((prev) => !prev)}
         >
           Closed
         </Chip>
