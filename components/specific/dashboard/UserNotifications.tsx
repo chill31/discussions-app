@@ -73,6 +73,7 @@ export default function UserNotifications({
           setNotifications(
             notifications.filter((notification) => notification.id !== id)
           );
+          router.refresh();
         } else {
           toast.error("Error deleting notification. Please try again later.");
         }
@@ -96,6 +97,7 @@ export default function UserNotifications({
               return notification;
             })
           );
+          router.refresh();
         } else {
           toast.error("Error marking notification as read. Please try again later.");
         }
