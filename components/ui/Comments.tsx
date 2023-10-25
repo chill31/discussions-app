@@ -203,6 +203,7 @@ export default function Comments({
   return (
     <div className="flex flex-col items-start justify-start gap-4">
       {/* COMMENTS MAP */}
+      {comments.length === 0 && <span className="dark:text-slate-500 text-slate-700">No comments</span>}
       {comments.map((comment, k: number) => (
         <div
           className={`flex flex-col border-2 border-transparent items-start justify-start gap-4 dark:bg-white/10 bg-zinc-300 py-4 rounded-md px-2 w-full ${
